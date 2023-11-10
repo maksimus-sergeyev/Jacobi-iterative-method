@@ -1,0 +1,1 @@
+# Jacobi method is one the iterative methods for approximating the solution of a system of n linear equations in n variables
