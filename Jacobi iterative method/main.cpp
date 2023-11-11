@@ -9,7 +9,7 @@
 const double EPS = 1E-300;
 
 // EPS = 1E-300; size = 30000; headers: max = MAXM = MAXV = 1E10; min = MINM = MINV = -1E10;
-// time of solving ~ 1500 ms, precision ~1e-8, iter ~5
+// time of solving ~ 1500 ms, precision ~1e-7, iter ~5
 // DPCPP COMPILER {CPU 11th Gen Intel(R) Core(TM) i7 - 11700F @ 2.50GHz, 16gb RAM, windows 10 64}
 
 int main()

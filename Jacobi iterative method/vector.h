@@ -24,16 +24,17 @@ public:
         for (int i = 0; i < size; i++)
             arr[i] = v[i];
     }
-    vector(vector&& v)
+    vector(vector&& v) : arr(v.arr), size(v.size)
     {
-        arr = nullptr;
-        std::swap(size, v.size);
-        std::swap(arr, v.arr);
+        v.size = 0;
+        v.arr = nullptr;
     }
     ~vector()
     {
         delete[] arr;
+
         arr = nullptr;
+
         size = 0;
     }
     T& operator [](int i)
@@ -86,8 +87,17 @@ public:
     }
     vector& operator=(vector&& v) 
     {
-        std::swap(arr, v.arr);
-        std::swap(size, v.size);
+        delete[] arr;
+
+        arr = v.arr;
+
+        size = v.size;
+
+        v.arr = nullptr;
+
+        v.size = 0;
+
+        return *this;
     }
     vector operator-(vector& v)
     {
