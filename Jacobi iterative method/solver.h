@@ -1,5 +1,4 @@
 #pragma once
-#include "vector.h"
 #include "matrix.h"
 #include <iostream>
 
@@ -115,7 +114,7 @@ public:
             if (iter > max_iter) return 2;
         }
 
-        //std::cout << iter << "\n";
+        std::cout << iter << "\n";
 
         return 1;
     }
