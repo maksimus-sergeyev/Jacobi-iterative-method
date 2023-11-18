@@ -4,38 +4,34 @@
 #include <time.h>
 #include "solver.h"
 #include "vector.h"
-#include "square_matrix.h"
+#include "matrix.h"
 
 const double EPS = 1E-300;
 
-// EPS = 1E-300; size = 30000; headers: max = MAXM = MAXV = 1E10; min = MINM = MINV = -1E10;
-// time of solving ~ 1500 ms, precision ~1e-7, iter ~5
-// DPCPP COMPILER {CPU 11th Gen Intel(R) Core(TM) i7 - 11700F @ 2.50GHz, 16gb RAM, windows 10 64}
+// EPS = 1E-300; size = 4000; max = MAXM = 1000; min = MINM = -1000;
+// time of solving ~ 20000 ms, precision ~1e-17, iter ~7
+// ICC COMPILER {CPU 11th Gen Intel(R) Core(TM) i7 - 11700F @ 2.50GHz, 16gb RAM, windows 10 64}
 
 int main()
 {
     srand(time(NULL));     
     
-    int size = 30000;
+    int size = 4000;
                   
     using T = double;
 
-    vector<T> x(size);
+    matrix<T> X(size, size);
 
-    square_matrix<T> A(size);
-    vector<T>b(size);
+    matrix<T> A(size, size);
+    matrix<T> B(size, size);
 
-    solver<T>s(size);
+    solver<T> s(size);
 
     s.random_diag_dom_fill();
 
-    A = s.get_m();
+    A = s.getA();
 
-    b = s.get_v();
-
-    //std::cout << std::setprecision(10) << A;
-
-    //std::cout << std::setprecision(10) << b;
+    B = s.getB();
 
     auto begin = std::chrono::steady_clock::now();
 
@@ -45,11 +41,18 @@ int main()
 
     auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
 
-    std::cout << "The time: " << elapsed_ms.count() << " ms\n";
+    if (flag == 1) 
+    {
+        matrix<T> tmp(size, size);
 
-    x = s.get_x();
+        X = s.getX();
 
-    std::cout << (A * x - b).abs() << "\n";
+        parallel_block_mult(A, X, tmp);
+
+        std::cout << "The time: " << elapsed_ms.count() << " ms\n";
+
+        std::cout << (tmp - B).norm() << "\n";
+    }
 
     return 0;
 }
