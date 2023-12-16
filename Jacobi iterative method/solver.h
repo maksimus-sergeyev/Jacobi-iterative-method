@@ -108,7 +108,7 @@ public:
         while ((X_NEXT - X_PREV).norm() > static_cast<T>(eps))
         {
             X_PREV = X_NEXT;
-            parallel_block_mult(A, X_PREV, X_NEXT);
+            parallel_block_mult2(A, X_PREV, X_NEXT);
             X_NEXT += B;
             iter++;
             if (iter > max_iter) return 2;

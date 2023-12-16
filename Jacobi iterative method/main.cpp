@@ -24,8 +24,8 @@ ICC
     options: / permissive - / GS / Qopenmp / Qftz / W3 / QxHost / Gy / Zc:wchar_t / Zi / O3 / Fd"x64\Release\vc143.pdb" / Zc : inline / Quse - intel - optimized - headers / D "NDEBUG" / D "_CONSOLE" / D "_UNICODE" / D "UNICODE" / Qipo / Zc : forScope / Oi / MD / FC / Fa"x64\Release\" /EHsc /nologo /Qparallel /Fo"x64\Release\" /Ot /Fp"x64\Release\Jacobi iterative method.pch" 
 
 
-// EPS = 1E-300; size = 8000; max = MAXM = 1000; min = MINM = -1000;
-// time of solving ~ 66000 ms, precision ~1e-17, iter ~7
+// EPS = 1E-300; size = 4096; max = MAXM = 1000; min = MINM = -1000;
+// time of solving ~ 11000 ms, precision ~1e-17, iter ~7
 
 */
 
@@ -33,7 +33,7 @@ int main()
 {
     srand(time(NULL));
 
-    int size = 8000;
+    int size = 4096;
 
     using T = double;
 
@@ -64,7 +64,7 @@ int main()
 
         X = s.getX();
 
-        parallel_block_mult(A, X, tmp);
+        parallel_block_mult2(A, X, tmp);
 
         std::cout << "The time: " << elapsed_ms.count() << " ms\n";
 
