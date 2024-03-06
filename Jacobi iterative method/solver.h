@@ -24,9 +24,9 @@
 //
 // x(0) := B
 
-const double min = -1000;
-const double max = 1000;
-const int max_iter = 100;
+const double min = -10000;
+const double max = 10000;
+const int max_iter = 16;
 
 template <class T>
 class solver
@@ -99,22 +99,25 @@ public:
 
         X_PREV = B;
 
-        parallel_block_mult(A, X_PREV, X_NEXT);
+        parallel_block_mult6(A, X_PREV, X_NEXT);
 
         X_NEXT += B;
 
-        int iter = 0;
+        int iter = 1;
 
         while ((X_NEXT - X_PREV).norm() > static_cast<T>(eps))
         {
             X_PREV = X_NEXT;
-            parallel_block_mult2(A, X_PREV, X_NEXT);
+
+            std::memset(&X_NEXT[0], 0, size * size * sizeof(T));
+            parallel_block_mult6(A, X_PREV, X_NEXT);
+
             X_NEXT += B;
             iter++;
             if (iter > max_iter) return 2;
         }
 
-        //std::cout << iter << "\n";
+        std::cout << iter << "\n";
 
         return 1;
     }

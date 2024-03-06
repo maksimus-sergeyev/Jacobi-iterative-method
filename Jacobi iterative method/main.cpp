@@ -2,10 +2,11 @@
 #include <chrono>
 #include <iomanip>
 #include <time.h>
+#include <thread>
 #include "solver.h"
 #include "matrix.h"
 
-const double EPS = 1E-300;
+const double EPS = 1E-20;
 
 /*
 CPU:
@@ -24,8 +25,17 @@ ICC
     options: / permissive - / GS / Qopenmp / Qftz / W3 / QxHost / Gy / Zc:wchar_t / Zi / O3 / Fd"x64\Release\vc143.pdb" / Zc : inline / Quse - intel - optimized - headers / D "NDEBUG" / D "_CONSOLE" / D "_UNICODE" / D "UNICODE" / Qipo / Zc : forScope / Oi / MD / FC / Fa"x64\Release\" /EHsc /nologo /Qparallel /Fo"x64\Release\" /Ot /Fp"x64\Release\Jacobi iterative method.pch" 
 
 
-// EPS = 1E-300; size = 4096; max = MAXM = 1000; min = MINM = -1000;
-// time of solving ~ 11000 ms, precision ~1e-17, iter ~7
+// EPS = 1E-20; size = 4032; max = MAXM = 10000; min = MINM = -10000;
+
+// A[i][i] ~ abs(A[i][1]) + ... + abs(A[i][n]) + rand() % MAXM
+
+// time of solving ~ 1550 ms
+
+// precision ~1e-16 == (A * X - B).norm(), where norm() is Frobenius norm
+
+// iter ~3
+
+   size = 4096, time ~ 2000 ms
 
 */
 
@@ -33,14 +43,11 @@ int main()
 {
     srand(time(NULL));
 
-    int size = 4096;
+    int size = 4032;
 
     using T = double;
 
-    matrix<T> X(size, size);
-
-    matrix<T> A(size, size);
-    matrix<T> B(size, size);
+    matrix<T> X(size, size), A(size, size), B(size, size);
 
     solver<T> s(size);
 
